@@ -12,17 +12,19 @@ class ExcelService:
     path = 'season24.xlsx'
 
     def read_excel(self):
-        year_list = pd.read_excel(self.path, sheet_name=None)
+        year_list = pd.read_excel(self.path, sheet_name=None, header=None)
 
         season_info_list = []
 
         for year in year_list:
-            print("==================================================")
-            print(year)
+
             df = pd.DataFrame(year_list[year])
-            df = df.dropna(axis=0)
 
             for row in df.iterrows():
+
+                if pd.isnull(row[1].iloc[0]):
+                    continue
+
                 season = row[1].iloc[0].split(" ")[0]
                 datetime = row[1].iloc[2].split(" ")
 
