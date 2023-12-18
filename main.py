@@ -1,10 +1,24 @@
-import RequestService
+from excel.ExcelService import ExcelService
 
-request_service = RequestService
+# import RequestService
+# from db import DBService
+#
+# request_service = RequestService
+#
+# response_xml = request_service.get_24_season_data(1900, 1)
+# season_response_list = request_service.parse_24_season_data(response_xml)
+#
+# for season_response in season_response_list:
+#     print(season_response)
+#     print("--------------------------------------------------")
+#
+#
+# db_service = DBService.DBService()
+#
+# db_service.insert_season(season_response_list[0])
 
-response_xml = request_service.get_24_season_data(2021, 1)
-season_response_list = request_service.parse_24_season_data(response_xml)
 
-for season_response in season_response_list:
-    print(season_response)
-    print("--------------------------------------------------")
+season_info_list = ExcelService().read_excel()
+
+for season_info in season_info_list:
+    print(season_info)
