@@ -84,40 +84,65 @@ def request_and_insert_db(now_year):
 
 
 def add_future_season():
-    season_list = db_service.get_all_season()
+    # season_list = db_service.get_all_season()
+    #
+    # season_count = 0
+    #
+    # time_diff = [0.0 for _ in range(24)]
+    #
+    # for i in range(0, len(season_list) - 1):
+    #
+    #     if int(season_list[i+1].year) < 2013:
+    #         continue
+    #
+    #     dt1 = datetime(int(season_list[i].year),
+    #                    int(season_list[i].month),
+    #                    int(season_list[i].day),
+    #                    int(season_list[i].hour),
+    #                    int(season_list[i].minute),
+    #                    0)
+    #
+    #     print(season_list[i + 1])
+    #
+    #     dt2 = datetime(int(season_list[i + 1].year),
+    #                    int(season_list[i + 1].month),
+    #                    int(season_list[i + 1].day),
+    #                    int(season_list[i + 1].hour),
+    #                    int(season_list[i + 1].minute),
+    #                    0)
+    #
+    #     season_count += 1
+    #     time_diff[season_count % 24] += (dt2 - dt1).total_seconds() / 60
+    #
+    # print(season_count / 24)
+    # print(time_diff)
+    # time_diff = [time_diff[i] / (season_count / 24) for i in range(24)]
+    # print(time_diff)
+    # print(sum(time_diff) / (24 * 60))
 
-    season_count = 0
+    time_diff = [21239.0, 21197.3, 21202.0, 21255.2, 21350.7, 21486.0,
+                 21601.2, 21880.6, 22023.0, 22208.5, 22374.0, 22509.6,
+                 22605.2, 22647.9, 22643.3, 22586.2, 22482.0, 22338.1,
+                 22167.1, 21978.8, 21789.5, 21608.6, 21451.4, 21324.4]
 
-    for i in range(0, len(season_list) - 1):
+    temp_date_time = datetime(2024, 12, 21, 18, 21, 0)
 
-        if int(season_list[i].year) < 2013:
-            continue
+    season_index = -1
 
-        dt1 = datetime(int(season_list[i].year),
-                       int(season_list[i].month),
-                       int(season_list[i].day),
-                       int(season_list[i].hour),
-                       int(season_list[i].minute),
-                       0)
+    while True:
+        temp_date_time += timedelta(minutes=time_diff[season_index])
+        if temp_date_time.year >= 2100:
+            break
 
-        print(season_list[i + 1])
+        season_index += 1
+        season_index %= 24
 
-        dt2 = datetime(int(season_list[i + 1].year),
-                       int(season_list[i + 1].month),
-                       int(season_list[i + 1].day),
-                       int(season_list[i + 1].hour),
-                       int(season_list[i + 1].minute),
-                       0)
-
-        time_diff = (dt2 - dt1).total_seconds() / 60
-
-        if time_diff > 10000:
-            season_count += 1
-            print(season_list[i], season_list[i + 1], time_diff)
-
+        db_service.insert_season(
+            season_info=SeasonInfo(season_24[season_index], temp_date_time.year, temp_date_time.month,
+                                   temp_date_time.day, temp_date_time.hour, temp_date_time.minute))
 
 
 # read_excel_and_insert_past_db()
 # read_excel_and_insert_db()
 # request_and_insert_db(2024)
-# add_future_season()
+add_future_season()
