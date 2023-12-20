@@ -1,6 +1,8 @@
 import os
 import sqlite3
 
+from model.SeasonInfo import SeasonInfo
+
 
 class DBService:
     def __init__(self):
@@ -54,3 +56,13 @@ class DBService:
         max_year = cursor.fetchone()[0]
         conn.close()
         return max_year
+
+    def get_all_season(self):
+        conn = sqlite3.connect('db/season-24.db')
+        cursor = conn.execute("SELECT * FROM SEASON")
+        season_list = []
+        for row in cursor:
+            season = SeasonInfo(row[0], row[1], row[2], row[3], row[4], row[5])
+            season_list.append(season)
+        conn.close()
+        return season_list
